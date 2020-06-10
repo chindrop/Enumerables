@@ -52,31 +52,42 @@ module Enumerable
   def my_any?(arg = nil)
     my_each do |element|
       if block_given?
-        return true unless yield element
+        return true if yield element
       elsif arg.nil?
-        return true unless element
-      else
-        return true unless arg === element
+        return true if element
+      elsif arg === element
+        return true
       end
     end
     false
   end
+
+  # def my_none?(arg = nil)
+  #   my_each do |element|
+  #     if block_given?
+  #       return false if yield element
+  #     elsif arg.nil?
+  #       return false if element
+  #     else
+  #       return false if arg === element
+  #     end
+  #   end
+  #   true
+  # end
 
   def my_none?(arg = nil)
     my_each do |element|
       if block_given?
-        return false unless yield element
+        return false if yield element
       elsif arg.nil?
-        return false unless element
-      else
-        return false unless arg === element
+        return false if element
+      elsif arg === element
+        return false
       end
     end
-    false
+    true
   end
   # rubocop:enable Style/CaseEquality
 end
 
-fruits = ["apple", "banana", "strawberry", "pineapple"]
-
-puts fruits.my_none? { |fruit| fruit.length > 10 }
+puts %w{ant bear cat}.my_none? { |word| word.length == 5 }
