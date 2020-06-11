@@ -62,19 +62,6 @@ module Enumerable
     false
   end
 
-  # def my_none?(arg = nil)
-  #   my_each do |element|
-  #     if block_given?
-  #       return false if yield element
-  #     elsif arg.nil?
-  #       return false if element
-  #     else
-  #       return false if arg === element
-  #     end
-  #   end
-  #   true
-  # end
-
   def my_none?(arg = nil)
     my_each do |element|
       if block_given?
@@ -87,7 +74,23 @@ module Enumerable
     end
     true
   end
+
+  def my_count(arg = nil)
+    count = 0
+    if !arg.nil?
+      my_each do |element|
+        count += 1 if element == arg
+      end
+    elsif block_given?
+      my_each do |element|
+        count += 1 if yield element
+      end
+    else
+      my_each do
+        count += 1
+      end
+    end
+    count
+  end
   # rubocop:enable Style/CaseEquality
 end
-
-puts %w{ant bear cat}.my_none? { |word| word.length == 5 }
