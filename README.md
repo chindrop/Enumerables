@@ -1,6 +1,3 @@
-# Enumerables
-
-
 # Enumerable Ruby methods
 
 > This project is the recreation of some of the methods that are part of the Enumerable module.
