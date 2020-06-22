@@ -92,5 +92,52 @@ module Enumerable
     end
     count
   end
+
+  def my_map(&block)
+    result = []
+    return to_enum(:my_map) unless block_given?
+    my_each do |element|
+      if block_given?
+        result.push(yield element)
+      else
+        result.push(block.call(element))
+      end
+    end
+    result
+  end
+  
+  def my_inject(*args)
+    new_array = is_a?(Array) ? self : to_a
+
+    if args[0].is_a?(Symbol) || args[0].is_a?(String)
+      sym = args[0]
+    elsif args[0].is_a?(Integer)
+      memo = args[0]
+      sym = args[1] if args[1].is_a?(Symbol) || args[1].is_a?(String)
+    end
+    if sym
+      new_array.my_each do |item|
+        memo = if memo
+                 memo.send(sym, item)
+               else
+                 item
+               end
+      end
+    else
+      new_array.my_each do |item|
+        memo = if memo
+                 yield(memo, item)
+               else
+                 item
+               end
+      end
+    end
+    memo
+  end
+
+  def multiply_els(array)
+    array.my_inject(:*)
+  end
+end
   # rubocop:enable Style/CaseEquality
 end
