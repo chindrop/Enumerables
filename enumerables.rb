@@ -13,8 +13,8 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      length.times do |elem, index|
-        yield self[elem], index
+      length.times do |index|
+        yield self[index], index
       end
       self
     else
@@ -138,3 +138,5 @@ def multiply_els(array)
   array.my_inject(:*)
 end
 # rubocop:enable Metrics/ModuleLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/CaseEquality, Metrics/MethodLength
+
+[1, 2, 3, 4, 5].my_each_with_index { |element, index| puts "#{element} => #{index}" }
