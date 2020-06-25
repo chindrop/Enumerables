@@ -1,10 +1,9 @@
-# frozen_string_literal: true
-
+# rubocop:disable Metrics/ModuleLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/CaseEquality, Metrics/MethodLength
 module Enumerable
   def my_each
     if block_given?
-      length.times do |elem|
-        yield self[elem]
+      size.times do |elem|
+        yield(to_a[elem])
       end
       self
     else
@@ -14,7 +13,7 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      length.times do |elem|
+      length.times do |elem, index|
         yield self[elem], index
       end
       self
@@ -34,7 +33,6 @@ module Enumerable
       to_enum(:my_select)
     end
   end
-  # rubocop:disable Style/CaseEquality
 
   def my_all?(arg = nil)
     my_each do |element|
@@ -96,6 +94,7 @@ module Enumerable
   def my_map(&block)
     result = []
     return to_enum(:my_map) unless block_given?
+
     my_each do |element|
       if block_given?
         result.push(yield element)
@@ -105,7 +104,7 @@ module Enumerable
     end
     result
   end
-  
+
   def my_inject(*args)
     new_array = is_a?(Array) ? self : to_a
 
@@ -134,10 +133,8 @@ module Enumerable
     end
     memo
   end
-
-  def multiply_els(array)
-    array.my_inject(:*)
-  end
 end
-  # rubocop:enable Style/CaseEquality
+def multiply_els(array)
+  array.my_inject(:*)
 end
+# rubocop:enable Metrics/ModuleLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Style/CaseEquality, Metrics/MethodLength
